@@ -1,0 +1,8 @@
+{
+  "id": "light-page",
+  "kamoji": "(￣ー￣)",
+  "label": "page agent",
+  "work": "In-page ask loop. Yields at 50ms. Registers WebMCP tools. Prompt API if present, else name match.",
+  "status": "INPROG",
+  "path": "agents/light-page"
+}

@@ -1,0 +1,8 @@
+{
+  "id": "new-agent",
+  "kamoji": "(・_・?)",
+  "label": "unnamed",
+  "work": "What this agent does, one line.",
+  "status": "WAIT",
+  "path": "agents/new-agent"
+}

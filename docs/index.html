@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>agents</title>
+  <style>
+    :root { color-scheme: light dark; font: 16px/1.4 ui-sans-serif, system-ui, sans-serif; }
+    body { margin: 0; padding: 1rem; display: grid; gap: 0.75rem; }
+    h1 { font-size: 1.1rem; font-weight: 600; margin: 0; }
+    ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
+    li {
+      content-visibility: auto;
+      contain-intrinsic-size: auto none auto 140px;
+      border: 1px solid color-mix(in srgb, CanvasText 22%, transparent);
+      padding: 0.75rem;
+      display: grid;
+      gap: 0.2rem;
+    }
+    .face { font-size: 1.6rem; margin: 0; }
+    .meta { opacity: 0.7; font-size: 0.85rem; }
+    a { color: inherit; }
+  </style>
+</head>
+<body>
+  <h1>agents</h1>
+  <p id="status">loading</p>
+  <ul id="board"></ul>
+  <script>
+    const status = document.querySelector('#status');
+    const board = document.querySelector('#board');
+
+    const card = (agent) => {
+      const li = document.createElement('li');
+      const face = document.createElement('p');
+      face.className = 'face';
+      face.textContent = agent.kamoji || '(・_・)';
+      const title = document.createElement('strong');
+      title.textContent = agent.label || agent.id;
+      const work = document.createElement('p');
+      work.textContent = agent.work || '';
+      const meta = document.createElement('p');
+      meta.className = 'meta';
+      meta.textContent = `${agent.status || 'WAIT'} · ${agent.id}`;
+      li.append(face, title, work, meta);
+      if (agent.path) {
+        const link = document.createElement('a');
+        link.href = agent.path;
+        link.textContent = 'folder';
+        li.append(link);
+      }
+      return li;
+    };
+
+    const run = async () => {
+      const res = await fetch('registry.json');
+      if (!res.ok) throw new Error(String(res.status));
+      const data = await res.json();
+      const agents = Array.isArray(data.agents) ? data.agents : [];
+      board.replaceChildren(...agents.map(card));
+      status.textContent = `${agents.length} agent${agents.length === 1 ? '' : 's'}`;
+    };
+
+    run().catch((err) => { status.textContent = `board failed: ${err.message}`; });
+  </script>
+</body>
+</html>
